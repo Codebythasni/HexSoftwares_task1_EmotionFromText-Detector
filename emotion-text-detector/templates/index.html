@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion from Text Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <header class="hero">
+            <h1>Emotion from Text Detector</h1>
+            <p class="tagline">
+                Type a sentence and discover the emotion behind it —
+                classified as Happy, Sad, Angry, or Neutral using TextBlob.
+            </p>
+        </header>
+
+        <form method="post" class="analyzer">
+            <label for="text">Your sentence</label>
+            <textarea
+                id="text"
+                name="text"
+                rows="4"
+                maxlength="500"
+                placeholder="e.g. I am extremely happy today"
+            >{{ text }}</textarea>
+            <button type="submit">Analyze Emotion</button>
+        </form>
+
+        {% if error %}
+        <div class="alert error" role="alert">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+        <section class="result emotion-{{ result.emotion|lower }}" aria-live="polite">
+            <div class="emoji" aria-hidden="true">{{ result.emoji }}</div>
+            <h2>{{ result.emotion }}</h2>
+
+            <dl class="metrics">
+                <div>
+                    <dt>Polarity</dt>
+                    <dd>{{ "%.2f"|format(result.polarity) }}</dd>
+                </div>
+                <div>
+                    <dt>Subjectivity</dt>
+                    <dd>{{ "%.2f"|format(result.subjectivity) }}</dd>
+                </div>
+                <div>
+                    <dt>Confidence</dt>
+                    <dd>{{ "%.2f"|format(result.confidence) }}%</dd>
+                </div>
+            </dl>
+
+            <p class="note">Confidence is a heuristic score, not a true probability.</p>
+        </section>
+        {% endif %}
+
+        <footer class="footer">
+            <p>TextBlob + Flask &middot; AI Internship Project 02 &middot; Phase 3</p>
+        </footer>
+    </main>
+</body>
+</html>
